@@ -31,6 +31,10 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__' 
+        
+        extra_kwargs = {
+            'organizer': {'write_only': True} 
+        }
 
 class EventRegistrationSerializer(serializers.ModelSerializer):
     customer = serializers.PrimaryKeyRelatedField(read_only=True)

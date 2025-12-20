@@ -19,6 +19,9 @@ class EventViewSet(viewsets.ModelViewSet):
         if self.action in ['create','update','partial_update', 'destroy']:
             return [IsAdminUser() | IsOrganizer()]
         return [IsAuthenticated()]
+    
+    def perform_create(self, serializer):
+        serializer.save(organizer=self.request.user)
 
 class EventRegistrationViewSet(viewsets.ModelViewSet):
     queryset = EventRegistration.objects.all()
