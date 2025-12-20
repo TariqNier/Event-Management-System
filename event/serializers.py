@@ -1,6 +1,30 @@
 from rest_framework import serializers,status
-from .models import Event, Registration
+from .models import Event, EventRegistration,User
 from rest_framework.response import Response
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+        read_only_fields = ['role']
+        extra_kwargs = {
+            'password': {'write_only': True} 
+        }
+        
+        
+    def create(self, validated_data):
+       
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email'),
+            password=validated_data['password']
+        )
+        return user
+        
+        
+
+
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -8,12 +32,14 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__' 
 
-class RegistrationSerializer(serializers.ModelSerializer):
+class EventRegistrationSerializer(serializers.ModelSerializer):
+    customer = serializers.PrimaryKeyRelatedField(read_only=True)
+    
     class Meta:
-        model = Registration
+        model = EventRegistration
         fields = '__all__'
         
-    def create(self, validated_data):
+    def validate(self, validated_data):
         event=validated_data['event']
         ticket_type=validated_data['ticket_type']
    
@@ -25,7 +51,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         elif ticket_type == 'BACKSTAGE':
             limit = event.backstage_limit
   
-        sold_count = Registration.objects.filter(event=event, ticket_type=ticket_type).count()
+        sold_count = EventRegistration.objects.filter(event=event, ticket_type=ticket_type).count()
         print("SOLD COUNT: ",sold_count)
         print("limit: ",limit)
        
@@ -36,4 +62,4 @@ class RegistrationSerializer(serializers.ModelSerializer):
             )
         
         
-        return super().create(validated_data)
+        return validated_data

@@ -1,6 +1,28 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,AbstractUser
 # Create your models here.
+
+class User(AbstractUser):
+    ROLE_CHOICES = [
+        ('ADMIN', 'Admin'),
+        ('ORGANIZER', 'Organizer'),
+        ('ATTENDEE', 'Attendee'),
+    ]
+    
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='ATTENDEE')
+    
+    
+    def save(self, *args,**kwargs):
+        if self.is_superuser:
+            self.role = 'ADMIN'
+    
+
+        super().save(*args, **kwargs)
+
+
+
+
+
 
 class Event(models.Model):
    
@@ -34,7 +56,7 @@ class Event(models.Model):
 #     event=models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
 
     
-class Registration(models.Model):
+class EventRegistration(models.Model):
     
     TICKET_TYPES= [
         ('STANDARD', 'Standard'),
