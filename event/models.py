@@ -37,6 +37,8 @@ class Event(models.Model):
     vip_limit=models.IntegerField(default=0,null=True) 
     backstage_price=models.DecimalField(max_digits=6, decimal_places=2, blank=True,null=True)
     backstage_limit=models.IntegerField(default=0,null=True)
+    description=models.TextField(blank=True)
+    
 
 
     def __str__(self):

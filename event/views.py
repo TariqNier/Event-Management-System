@@ -5,6 +5,10 @@ from .models import Event, EventRegistration,User
 from .serializers import EventRegistrationSerializer, EventSerializer,UserRegistrationSerializer
 from rest_framework.response import Response
 from .permissions import IsOrganizer
+   
+   
+  
+   
                     
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -19,7 +23,7 @@ class EventViewSet(viewsets.ModelViewSet):
 class EventRegistrationViewSet(viewsets.ModelViewSet):
     queryset = EventRegistration.objects.all()
     serializer_class = EventRegistrationSerializer
-
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user

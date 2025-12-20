@@ -13,6 +13,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         }
         
         
+        
+        
+        
     def create(self, validated_data):
        
         user = User.objects.create_user(
@@ -23,9 +26,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
         
         
-
-
-
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,6 +42,13 @@ class EventRegistrationSerializer(serializers.ModelSerializer):
     def validate(self, validated_data):
         event=validated_data['event']
         ticket_type=validated_data['ticket_type']
+
+        
+        user = self.context['request'].user
+        
+        if EventRegistration.objects.filter(event=event, customer=user).exists():
+            raise serializers.ValidationError({"error": "You have already booked a ticket for this event!"})
+   
    
         limit = 0
         if ticket_type == 'STANDARD':
