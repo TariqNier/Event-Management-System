@@ -18,7 +18,7 @@ class EventViewSet(viewsets.ModelViewSet):
     
     def get_permissions(self):
         if self.action in ['create','update','partial_update', 'destroy']:
-            return [IsAdminUser() | IsOrganizer()]
+            return [(IsAdminUser | IsOrganizer)()]
         return [IsAuthenticated()]
     
     def perform_create(self, serializer):
