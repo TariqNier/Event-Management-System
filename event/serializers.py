@@ -1,3 +1,4 @@
+#event/serializers.py
 from rest_framework import serializers,status
 from .models import Event, EventRegistration,User
 from rest_framework.response import Response
@@ -33,7 +34,7 @@ class EventSerializer(serializers.ModelSerializer):
         fields = '__all__' 
         
         extra_kwargs = {
-            'organizer': {'write_only': True} 
+            'organizer': {'read_only': True} 
         }
 
 class EventRegistrationSerializer(serializers.ModelSerializer):

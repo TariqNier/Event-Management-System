@@ -1,3 +1,4 @@
+#event/models.py
 from django.db import models
 from django.contrib.auth.models import User,AbstractUser
 # Create your models here.
@@ -38,7 +39,7 @@ class Event(models.Model):
     backstage_price=models.DecimalField(max_digits=6, decimal_places=2, blank=True,null=True)
     backstage_limit=models.IntegerField(default=0,null=True)
     description=models.TextField(blank=True)
-    organizer=models.ForeignKey(User, on_delete=models.CASCADE)
+    organizer=models.ForeignKey(User, on_delete=models.CASCADE,default=None)
 
 
     def __str__(self):
