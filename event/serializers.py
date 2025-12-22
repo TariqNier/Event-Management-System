@@ -29,6 +29,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         
 
 class EventSerializer(serializers.ModelSerializer):
+    tickets_left = serializers.SerializerMethodField()
+    is_sold_out = serializers.SerializerMethodField()
+    
     class Meta:
         model = Event
         fields = '__all__' 
@@ -36,14 +39,25 @@ class EventSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'organizer': {'read_only': True} 
         }
+        
+        
+    def get_tickets_left(self, obj):
+        sold = EventRegistration.objects.filter(event=obj, ticket_type='STANDARD').count()
+        return obj.standard_limit - sold
+
+    def get_is_sold_out(self, obj):
+        sold = EventRegistration.objects.filter(event=obj, ticket_type='STANDARD').count()
+        return sold >= obj.standard_limit
 
 class EventRegistrationSerializer(serializers.ModelSerializer):
     customer = serializers.PrimaryKeyRelatedField(read_only=True)
     
+    
+    event_info = EventSerializer(source='event', read_only=True) 
+
     class Meta:
         model = EventRegistration
-        fields = '__all__'
-        
+        fields = ['id', 'event', 'event_info', 'ticket_type', 'booking_date', 'customer']
     def validate(self, validated_data):
         event=validated_data['event']
         ticket_type=validated_data['ticket_type']
