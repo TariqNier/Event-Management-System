@@ -151,7 +151,7 @@ The backend exposes the following REST API endpoints:
 
 ## 🎥 Video Demo
 
-[Insert Link to Video Demo Here]
+[https://drive.google.com/file/d/19EbeSO0Q0EVA1IhoPTwdx-2OA-mDIlVQ/view?usp=drive_link]
 
 ```
 
