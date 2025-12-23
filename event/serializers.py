@@ -29,8 +29,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         
 
 class EventSerializer(serializers.ModelSerializer):
-    tickets_left = serializers.SerializerMethodField()
+    standard_left = serializers.SerializerMethodField()
     is_sold_out = serializers.SerializerMethodField()
+    vip_left= serializers.SerializerMethodField()
+    backstage_left= serializers.SerializerMethodField()
     
     class Meta:
         model = Event
@@ -44,13 +46,24 @@ class EventSerializer(serializers.ModelSerializer):
         }
         
         
-    def get_tickets_left(self, obj):
+    def get_standard_left(self, obj):
         sold = EventRegistration.objects.filter(event=obj, ticket_type='STANDARD').count()
         return obj.standard_limit - sold
 
+    def get_vip_left(self, obj):
+        if not obj.vip_limit: return 0
+        sold = EventRegistration.objects.filter(event=obj, ticket_type='VIP').count()
+        return obj.vip_limit - sold
+
+    def get_backstage_left(self, obj):
+        if not obj.backstage_limit: return 0
+        sold = EventRegistration.objects.filter(event=obj, ticket_type='BACKSTAGE').count()
+        return obj.backstage_limit - sold
+
     def get_is_sold_out(self, obj):
-        sold = EventRegistration.objects.filter(event=obj, ticket_type='STANDARD').count()
-        return sold >= obj.standard_limit
+        total_sold = EventRegistration.objects.filter(event=obj).count()
+        total_capacity = (obj.standard_limit or 0) + (obj.vip_limit or 0) + (obj.backstage_limit or 0)
+        return total_sold >= total_capacity
 
 class EventRegistrationSerializer(serializers.ModelSerializer):
     customer = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -61,6 +74,8 @@ class EventRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventRegistration
         fields = ['id', 'event', 'event_info', 'ticket_type', 'booking_date', 'customer']
+    
+    
     def validate(self, validated_data):
         event=validated_data['event']
         ticket_type=validated_data['ticket_type']
@@ -68,7 +83,7 @@ class EventRegistrationSerializer(serializers.ModelSerializer):
         
         user = self.context['request'].user
         
-        if EventRegistration.objects.filter(event=event, customer=user).exists():
+        if EventRegistration.objects.filter(event=event, customer=user, ticket_type=ticket_type).exists():
             raise serializers.ValidationError({"error": "You have already booked a ticket for this event!"})
    
    

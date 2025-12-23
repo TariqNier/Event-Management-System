@@ -76,7 +76,7 @@ class EventRegistration(models.Model):
         return f"{self.customer.username} - {self.event.title} ({self.ticket_type})"
 
     class Meta:
-        unique_together=('event' ,'customer')        
+        unique_together=('event' ,'customer','ticket_type')        
     
     
 
