@@ -11,3 +11,6 @@ router.register(r'users', UserViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 ]
+
+
+#localhost:8000/events/

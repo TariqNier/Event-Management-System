@@ -72,6 +72,8 @@ class EventRegistration(models.Model):
     booking_date=models.DateTimeField(auto_now_add=True)
     ticket_type=models.CharField(max_length=20,choices=TICKET_TYPES)
     
+    def __str__(self):
+        return f"{self.customer.username} - {self.event.title} ({self.ticket_type})"
 
     class Meta:
         unique_together=('event' ,'customer')        

@@ -23,6 +23,7 @@ class CustomAuthToken(ObtainAuthToken):
         return Response({
             'token': token.key,
             'username': user.username, 
+            'role': user.role
         })   
    
 
@@ -39,6 +40,8 @@ class EventViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(organizer=self.request.user)
+        
+    
 
 class EventRegistrationViewSet(viewsets.ModelViewSet):
     queryset = EventRegistration.objects.all()
@@ -47,12 +50,9 @@ class EventRegistrationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-
-        if user.is_staff:
-            return EventRegistration.objects.all()
-
         return EventRegistration.objects.filter(customer=user)
-
+    
+  
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user)
     

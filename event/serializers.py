@@ -36,6 +36,9 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__' 
         
+        
+        #Response : 
+        # {"id": 1, "title": "Concert A", "location": "Venue A", "date": "2024}
         extra_kwargs = {
             'organizer': {'read_only': True} 
         }
