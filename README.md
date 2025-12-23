@@ -1,4 +1,5 @@
 
+
 # EventMgr - Event Management System
 
 ## 📌 Project Description
@@ -37,6 +38,7 @@ EventMgr/
 │   ├── event/              # Main App (Models, Views, Serializers)
 │   ├── system/             # Project Settings & URLs
 │   ├── db.sqlite3          # Database file
+│   ├── requirements.txt    # Python Dependencies
 │   └── manage.py           # Django CLI utility
 │
 ├── frontend/               # React Frontend
@@ -81,8 +83,10 @@ pip install -r requirements.txt
 ```
 
 
-4. **Apply Migrations:**
+4. **Prepare the Database:**
+*(Run these two commands to initialize the database and tables)*
 ```bash
+python manage.py makemigrations
 python manage.py migrate
 
 ```
@@ -115,7 +119,8 @@ npm install
 ```
 
 
-*(Note: You need Node.js installed on your machine)*
+*(Note: You need Node.js installed on your machine)*.
+
 2. **Start the Application:**
 ```bash
 npm start
@@ -137,6 +142,7 @@ The backend exposes the following REST API endpoints:
 | **POST** | `/users/register/` | Register a new user | Public |
 | **GET** | `/events/` | List all upcoming events | Authenticated |
 | **POST** | `/events/` | Create a new event | Admin/Organizer |
+| **GET** | `/events/<id>/` | Get details of a specific event | Authenticated |
 | **GET** | `/registrations/` | List logged-in user's bookings | Authenticated |
 | **POST** | `/registrations/` | Book a ticket (Standard/VIP/etc) | Authenticated |
 | **DEL** | `/registrations/<id>/` | Cancel/Delete a booking | Authenticated |
@@ -151,8 +157,18 @@ The backend exposes the following REST API endpoints:
 
 ## 🎥 Video Demo
 
-[https://drive.google.com/file/d/19EbeSO0Q0EVA1IhoPTwdx-2OA-mDIlVQ/view?usp=drive_link]
+[Watch the Video Demo Here](https://drive.google.com/file/d/19EbeSO0Q0EVA1IhoPTwdx-2OA-mDIlVQ/view?usp=drive_link)
 
 ```
+
+***
+
+### ⚠️ Final Reminder
+
+Before you submit, don't forget to **generate the requirements.txt file** so that Step 3 in the README actually works!
+
+Run this in your backend terminal (with venv active):
+```bash
+pip freeze > requirements.txt
 
 ```
