@@ -159,16 +159,5 @@ The backend exposes the following REST API endpoints:
 
 [Watch the Video Demo Here](https://drive.google.com/file/d/19EbeSO0Q0EVA1IhoPTwdx-2OA-mDIlVQ/view?usp=drive_link)
 
-```
 
-***
 
-### ⚠️ Final Reminder
-
-Before you submit, don't forget to **generate the requirements.txt file** so that Step 3 in the README actually works!
-
-Run this in your backend terminal (with venv active):
-```bash
-pip freeze > requirements.txt
-
-```
